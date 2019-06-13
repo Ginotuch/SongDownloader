@@ -48,8 +48,8 @@ class Conductor:
         self.parsing_options = parsing_options
         self.downloader = downloader
 
-    def parse(self, input):
-        for index, line in enumerate(input):
+    def parse(self, input_str: str):
+        for index, line in enumerate(input_str):
             song = self._parse_line(line, index)
             self.downloader.download(song, self.parsing_options.audio_format)
 
