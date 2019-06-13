@@ -27,7 +27,7 @@ class YoutubeDlDownloader(Downloader):
             subprocess.run(['youtube-dl', song.url, '-x', '--audio-format={0}'.format(audio_format), '-o', 'file.dat'], cwd = tmp_dir)
             subprocess.run(['ls', '-la'], cwd = tmp_dir)
             subprocess.run(['ffmpeg', '-i', filename,
-                            '-metadata', 'title={0}'.format(song.title), '-metadata', 'author="{0}"'.format(song.artist), '-metadata', 'artist={0}'.format(song.artist), 
+                            '-metadata', 'title={0}'.format(song.title), '-metadata', 'author={0}'.format(song.artist), '-metadata', 'artist={0}'.format(song.artist), 
                             '-codec', 'copy', 'file1.{0}'.format(audio_format)], cwd = tmp_dir)
             filename = 'file1.{0}'.format(audio_format)
             shutil.move("{0}/{1}".format(tmp_dir, filename), "./{0}.{1}".format(song.title, audio_format))            
