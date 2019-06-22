@@ -10,3 +10,4 @@ This program is licensed under the MIT License.
 # TODO
 - Support parallel downloads
 - Support other downloaders
+- Resumable downloads
