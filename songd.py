@@ -28,7 +28,7 @@ class YoutubeDlDownloader(Downloader):
     def download(self, song: Song, audio_format: str):
         with tempfile.TemporaryDirectory() as tmp_dir:
             filename = 'file.{0}'.format(audio_format)
-            subprocess.run(['youtube-dl', song.url, '-x', '--audio-format={0}'.format(audio_format), '-o', 'file.dat'],
+            subprocess.run(['youtube-dl', song.url, '-x', '--audio-format={0}'.format(audio_format), '-o', 'file.dat', '--no-playlist'],
                            cwd=tmp_dir)
             subprocess.run(['ffmpeg', '-i', filename,
                             '-metadata', 'title={0}'.format(song.title), '-metadata', 'author={0}'.format(song.artist),
