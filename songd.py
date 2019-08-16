@@ -3,6 +3,7 @@ import sys
 import subprocess
 import tempfile
 import shutil
+import threading
 
 
 def eprint(*args, **kwargs):
@@ -28,7 +29,8 @@ class YoutubeDlDownloader(Downloader):
     def download(self, song: Song, audio_format: str):
         with tempfile.TemporaryDirectory() as tmp_dir:
             filename = 'file.{0}'.format(audio_format)
-            subprocess.run(['youtube-dl', song.url, '-x', '--audio-format={0}'.format(audio_format), '-o', 'file.dat', '--no-playlist'],
+            subprocess.run(['youtube-dl', song.url, '-x', '--audio-format={0}'.format(audio_format), '-o', 'file.dat',
+                            '--no-playlist'],
                            cwd=tmp_dir)
             subprocess.run(['ffmpeg', '-i', filename,
                             '-metadata', 'title={0}'.format(song.title), '-metadata', 'author={0}'.format(song.artist),
@@ -59,9 +61,14 @@ class Conductor:
         self.downloader = downloader
 
     def parse(self, input_str: str):
+        threads = []
         for index, line in enumerate(input_str):
             song = self._parse_line(line, index)
-            self.downloader.download(song, self.parsing_options.audio_format)
+            thread: threading.Thread = threading.Thread(target=self.downloader.download,
+                                                        args=(song, self.parsing_options.audio_format))
+            thread.start()
+            threads.append(thread)
+        [thread.join() for thread in threads]
 
     def _parse_line(self, line: str, index: int) -> Song:
         splits = line.split(self.parsing_options.delimiter)
