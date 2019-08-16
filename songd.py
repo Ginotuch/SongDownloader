@@ -71,7 +71,7 @@ class Conductor:
         [thread.join() for thread in threads]
 
     def _parse_line(self, line: str, index: int) -> Song:
-        splits = line.split(self.parsing_options.delimiter)
+        splits = [x.strip() for x in line.split(self.parsing_options.delimiter)]
         if len(splits) != 3:
             eprint('PARSING: invalid number of arguments on line {0}'.format(index))
             sys.exit(1)
